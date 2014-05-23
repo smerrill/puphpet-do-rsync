@@ -1,5 +1,35 @@
 require 'yaml'
 
+# Fix rsync support inline.
+class InstallRsyncPlugin < Vagrant.plugin('2')
+  class InstallRsyncAction
+    def initialize(app, env)
+      @app = app
+      @machine = env[:machine]
+    end
+
+    def call(env)
+      if @machine.guest.capability?(:rsync_installed)
+        installed = @machine.guest.capability(:rsync_installed)
+        if !installed
+          can_install = @machine.guest.capability?(:rsync_install)
+          raise Vagrant::Errors::RSyncNotInstalledInGuest if !can_install
+          @machine.ui.info I18n.t("vagrant.rsync_installing")
+          @machine.guest.capability(:rsync_install)
+        end
+      end
+
+      @app.call(env)
+    end
+  end
+
+  name 'installrsync'
+
+  action_hook 'installrsync' do |hook|
+    hook.before Vagrant::Action::Builtin::SyncedFolders, InstallRsyncAction
+  end
+end
+
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'digital_ocean'
 
 dir = File.dirname(File.expand_path(__FILE__))
