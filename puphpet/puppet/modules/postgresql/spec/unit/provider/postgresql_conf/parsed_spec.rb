@@ -22,18 +22,18 @@ describe provider_class do
 
   describe "simple configuration that should be allowed" do
     it "should parse a simple ini line" do
-      provider.parse_line("listen_addreses = '*'").should ==
-        { :name=>"listen_addreses", :value=>"*", :comment=>nil, :record_type=>:parsed }
+      provider.parse_line("listen_addresses = '*'").should ==
+        { :name=>"listen_addresses", :value=>"*", :comment=>nil, :record_type=>:parsed }
     end
 
     it "should parse a simple ini line (2)" do
-      provider.parse_line("   listen_addreses = '*'").should ==
-        { :name=>"listen_addreses", :value=>"*", :comment=>nil, :record_type=>:parsed }
+      provider.parse_line("   listen_addresses = '*'").should ==
+        { :name=>"listen_addresses", :value=>"*", :comment=>nil, :record_type=>:parsed }
     end
 
     it "should parse a simple ini line (3)" do
-      provider.parse_line("listen_addreses = '*' # dont mind me").should ==
-        { :name=>"listen_addreses", :value=>"*", :comment=>"dont mind me", :record_type=>:parsed }
+      provider.parse_line("listen_addresses = '*' # dont mind me").should ==
+        { :name=>"listen_addresses", :value=>"*", :comment=>"dont mind me", :record_type=>:parsed }
     end
 
     it "should parse a comment" do
